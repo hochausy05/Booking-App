@@ -25,3 +25,11 @@
 - **Các thay đổi chính:** Thêm Bottom Tabs gồm Rooms và My Bookings; lồng Rooms Stack với Room Detail; thêm ba màn hình placeholder, điều hướng back tạm thời và theme token cơ bản. Cài `@react-navigation/bottom-tabs` vì package này cần cho tab navigator.
 - **Kiểm tra đã thực hiện:** `npm run typecheck` thành công; `npx expo config --json` hợp lệ; Metro khởi động và trả HTTP 200; Android bundle export thành công với 840 modules.
 - **Hạn chế còn lại:** Chưa thao tác trực tiếp các tab trên Expo Go/thiết bị vật lý; cần xác nhận thủ công Rooms → My Bookings → Rooms và Rooms → Room Detail → Back.
+
+## MP2-03 — Room Data Foundation
+
+- **Ngày:** 2026-09-24
+- **Trạng thái:** Hoàn thành.
+- **Các thay đổi chính:** Thêm model `Room`, `Building`, `RoomEquipment` và `TimeSlot`; tạo 16 phòng mẫu chia đều cho bốn tòa nhà; ảnh dùng `null` an toàn do thư mục asset ảnh hiện chưa có phòng ảnh; thêm hằng số tập trung cho bốn khung giờ cố định.
+- **Kiểm tra đã thực hiện:** `npm run typecheck`; kiểm tra dataset xác nhận 16 phòng, 4 phòng mỗi tòa A/B/C/V, sức chứa 2–20, đủ projector/whiteboard/highSpecPc/ac; kiểm tra đủ bốn khung giờ; `npx expo config --json`; Android bundle export thành công.
+- **Hạn chế còn lại:** Ảnh phòng chưa có, trường `image` đang là `null` để giao diện có thể hiển thị placeholder.

@@ -26,13 +26,13 @@
 - [x] Add shared design tokens
 - [x] Verify navigation actions
 
-### [ ] MP2-03 — Room Data Foundation
+### [x] MP2-03 — Room Data Foundation
 
-- [ ] Define Room types
-- [ ] Prepare 12–20 room records
-- [ ] Include building/floor/capacity/equipment/image
-- [ ] Support current room availability state
-- [ ] Validate data shape
+- [x] Define Room types
+- [x] Prepare 12–20 room records
+- [x] Include building/floor/capacity/equipment/image
+- [x] Keep availability derived later; no permanent status boolean in Room
+- [x] Validate data shape
 
 ### [ ] MP2-04 — Room Discovery
 
