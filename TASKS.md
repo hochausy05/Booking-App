@@ -8,14 +8,14 @@
 
 ## Mini Project 2
 
-### [x] MP2-01 — Project Foundation
+### [-] MP2-01 — Project Foundation
 
 - [x] Initialize Expo + TypeScript project
 - [x] Install required dependencies
 - [x] Create project folder structure
 - [x] Add environment conventions
 - [x] Verify app starts
-- [ ] Verify physical-device / Expo Go run (cần kiểm tra thủ công)
+- Manual device verification is included in the consolidated MP2-10 check below.
 
 ### [x] MP2-02 — Navigation & UI Foundation
 
@@ -44,9 +44,9 @@
 - [x] Show equipment
 - [x] Show Available Now / Occupied
 - [x] Memoize room card
-- [ ] Verify room taps and Back navigation on a running app
+- Manual device verification is included in the consolidated MP2-10 check below.
 
-### [x] MP2-05 — Search & Multi-Filter
+### [-] MP2-05 — Search & Multi-Filter
 
 - [x] Search by room name
 - [x] Building filter A/B/C/V
@@ -57,9 +57,9 @@
 - [x] AC filter
 - [x] Support combined filters
 - [x] Handle empty results and clear all filters
-- [ ] Verify search, filter chip interaction, empty state, and Room Detail navigation on a running app / physical device (cần kiểm tra thủ công)
+- Manual device verification is included in the consolidated MP2-10 check below.
 
-### [x] MP2-06 — Room Detail & Time Selector
+### [-] MP2-06 — Room Detail & Time Selector
 
 - [x] Show room details, equipment and availability with invalid-room fallback
 - [x] Implement 7-day date selector with stable YYYY-MM-DD keys
@@ -67,9 +67,9 @@
 - [x] Show available, selected, booked and past states
 - [x] Prevent selection of booked and past slots
 - [x] Reset selected slot when changing date
-- [ ] Verify date/slot interaction, invalid-room fallback and Room Detail/Back navigation on a running app / physical device (cần kiểm tra thủ công)
+- Manual device verification is included in the consolidated MP2-10 check below.
 
-### [x] MP2-07 — Booking & Conflict Prevention
+### [-] MP2-07 — Booking & Conflict Prevention
 
 - [x] Add typed booking contract and Supabase client/service
 - [x] Add local migration for bookings, RLS policies, active-slot unique index and Realtime publication
@@ -82,10 +82,9 @@
 - [x] Verify Realtime publication, filtered INSERT delivery and subscription cleanup
 - [x] Verify booking service persistence, conflict mapping, TypeScript, Expo config and Android bundle
 - [x] Localize UI copy to Vietnamese and compact the discovery/detail layouts
-- [ ] Test competing bookings and Realtime updates across two physical devices (cần kiểm tra thủ công)
-- [ ] Verify Vietnamese copy, safe-area spacing, date row scrolling and bottom padding on iOS/Android (cần kiểm tra thủ công)
+- Manual device verification is included in the consolidated MP2-10 check below.
 
-### [ ] MP2-08 — Zustand & Persistence
+### [-] MP2-08 — Zustand & Persistence
 
 - [x] Create `useBookingStore`
 - [x] Centralize and store demo user/session
@@ -94,9 +93,9 @@
 - [x] Prepare remote-first cancellation store action
 - [x] Persist only demo user/session and filters with AsyncStorage
 - [x] Verify store hydration, filter restore/reset, persistence allowlist and cancellation cache behavior with mocked storage
-- [ ] Verify filter persistence after an actual app restart on device/emulator (cần kiểm tra thủ công)
+- Manual device verification is included in the consolidated MP2-10 check below.
 
-### [ ] MP2-09 — Booking Pass, QR & Notifications
+### [-] MP2-09 — Booking Pass, QR & Notifications
 
 - [x] Load current demo user's bookings from Supabase; show loading, error, empty and status states; refresh on focus/pull
 - [x] Cancel bookings remotely by changing status to `cancelled` with confirmation
@@ -107,21 +106,16 @@
 - [x] Attempt pending reminder cancellation after remote booking cancellation
 - [x] Verify service history/cancellation/rebooking, status-only RLS update, Realtime UPDATE delivery and cleanup
 - [x] Verify QR payload allowlist and notification scheduling/denial/past-time paths with automated checks
-- [ ] Verify My Bookings/QR/confirmation interactions and notification delivery/permission denial on iOS/Android device or emulator (cần kiểm tra thủ công)
+- Manual device verification is included in the consolidated MP2-10 check below.
 
-### [ ] MP2-10 — Final QA & Submission
+### [-] MP2-10 — Final QA & Submission
 
-- [ ] Test complete required flow
-- [ ] Test filters
-- [ ] Test booked slot disabled state
-- [ ] Test conflict prevention
-- [ ] Test app restart persistence
-- [ ] Test cancellation
-- [ ] Test QR
-- [ ] Test local notification
-- [ ] Remove dead buttons/placeholders
-- [ ] Check TypeScript/build/runtime errors
-- [ ] Finalize README
-- [ ] Prepare 2–3 minute demo
-- [ ] Prepare 2–4 page PDF report
-- [ ] Final GitHub cleanup
+- [x] Audit source for the required room, filter, booking, cancellation, QR, persistence, notification, and navigation flows.
+- [x] Verify exact/case-insensitive search, all building and capacity options, each equipment option, equipment AND logic, combined filters, empty results, and reset behavior using the room catalog.
+- [x] Verify Booking-App (`cbudliffmptczqucldsd`) schema, RLS/policies, partial unique conflict index, duplicate active rejection, cancellation/rebooking, history, Realtime INSERT/UPDATE, and zero remaining QA rows.
+- [x] Revoke public/client `EXECUTE` on the unused `public.rls_auto_enable()` RPC; verify its event trigger remains enabled and Supabase Security Advisor has no findings.
+- [x] Align Expo patch versions; run dependency checks and production dependency audit.
+- [x] Check tracked files for credentials and confirm `.env` is ignored and untracked.
+- [x] Finalize README and prepare a demo script and concise report outline.
+- [x] Run TypeScript, Expo config/doctor, Android export, and `git diff --check`.
+- [ ] Complete the full UI walkthrough on a physical device/emulator: room taps/back; search/filter/empty state; date/slot states and invalid-room fallback; Vietnamese layout/safe areas; booking/collision feedback; two-device Realtime; app-restart persistence; My Bookings/QR/cancellation; notification permission and actual delivery. (No device/emulator was connected during QA.)
