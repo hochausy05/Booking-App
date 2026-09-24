@@ -3,7 +3,6 @@ import { ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, Text, View
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { TIME_SLOTS } from '../constants/timeSlots';
 import { EQUIPMENT_LABELS } from '../constants/equipment';
-import { DEMO_USER_ID } from '../constants/demoUser';
 import { borderRadius, colors, fontSize, spacing } from '../constants/theme';
 import { TimeSlotButton } from '../components/TimeSlotButton';
 import { rooms } from '../constants/rooms';
@@ -13,10 +12,13 @@ import { BookingConflictError, createBooking, getActiveBookingsForRoomDate, subs
 import { getRoomAvailability } from '../utils/roomAvailability';
 import { formatDateForSummary, getNextSevenDates } from '../utils/roomDates';
 import { isSlotInPast } from '../utils/slotAvailability';
+import { useBookingStore } from '../store/useBookingStore';
 
 type Props = NativeStackScreenProps<RoomsStackParamList, 'RoomDetail'>;
 
 export function RoomDetailScreen({ navigation, route }: Props) {
+  const demoUserId = useBookingStore((state) => state.demoUser.id);
+  const upsertBooking = useBookingStore((state) => state.upsertBooking);
   const room = rooms.find((candidate) => candidate.id === route.params.roomId);
   const roomId = room?.id;
   const dates = useMemo(() => getNextSevenDates(), []);
@@ -94,11 +96,12 @@ export function RoomDetailScreen({ navigation, route }: Props) {
     try {
       const booking = await createBooking({
         roomId: room.id,
-        userId: DEMO_USER_ID,
+        userId: demoUserId,
         date: selectedDate,
         startTime: slot.startTime,
         endTime: slot.endTime,
       });
+      upsertBooking(booking);
       setBookings((current) => [...current, booking]);
       setSuccessBooking(booking);
       setSelectedSlotId(null);

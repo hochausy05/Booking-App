@@ -87,13 +87,14 @@
 
 ### [ ] MP2-08 — Zustand & Persistence
 
-- [ ] Create `useBookingStore`
-- [ ] Store demo user/session
-- [ ] Store active filters
-- [ ] Manage active reservations
-- [ ] Implement cancellation action
-- [ ] Persist appropriate state with AsyncStorage
-- [ ] Verify restart behavior
+- [x] Create `useBookingStore`
+- [x] Centralize and store demo user/session
+- [x] Move room filters to shared store
+- [x] Keep active booking references in runtime-only cache
+- [x] Prepare remote-first cancellation store action
+- [x] Persist only demo user/session and filters with AsyncStorage
+- [x] Verify store hydration, filter restore/reset, persistence allowlist and cancellation cache behavior with mocked storage
+- [ ] Verify filter persistence after an actual app restart on device/emulator (cần kiểm tra thủ công)
 
 ### [ ] MP2-09 — Booking Pass, QR & Notifications
 

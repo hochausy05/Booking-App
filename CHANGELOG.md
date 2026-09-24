@@ -74,3 +74,11 @@
 - **Các thay đổi chính:** Việt hóa nhãn điều hướng, tìm kiếm, bộ lọc, thiết bị, trạng thái phòng/khung giờ, ngày tháng, thông báo lỗi và kết quả đặt phòng. Thêm vùng an toàn cho các màn hình phù hợp, thu gọn RoomCard và khoảng cách các bộ lọc/chi tiết, đồng thời tăng khoảng đệm cuộn cuối danh sách và trang chi tiết.
 - **Các kiểm tra đã thực hiện:** `npm run typecheck`; `npx expo export --platform android --output-dir .expo-mp207-polish-check`; `git diff --check` đều thành công. Logic tìm kiếm/lọc, đặt phòng, Supabase, Realtime và điều hướng không được thay đổi trong phần polish.
 - **Hạn chế còn lại:** Chưa thao tác trực tiếp trên iOS/Android; cần kiểm tra nội dung tiếng Việt, safe area, cuộn hàng chọn ngày và khoảng đệm cuối trang trên thiết bị.
+
+## MP2-08 — Zustand & AsyncStorage Persistence
+
+- **Ngày:** 2026-09-24
+- **Trạng thái:** Hoàn thành phần triển khai và kiểm tra tự động; còn kiểm tra khôi phục bộ lọc sau khi khởi động lại app trên thiết bị/emulator.
+- **Các thay đổi chính:** Thêm `useBookingStore` dùng Zustand persist với khóa `study-room-booking-store`; lưu demo user và bộ lọc phòng, giữ booking cache/loading hydration ở runtime. Chuyển RoomsScreen sang dùng bộ lọc Zustand. Room Detail lấy user ID từ session store và thêm booking vào cache sau khi Supabase tạo thành công. Chuẩn bị hành động hủy chỉ cập nhật cache sau khi thao tác từ xa do caller cung cấp thành công.
+- **Các kiểm tra đã thực hiện:** `npm run typecheck`; `npx expo config --json`; Android bundle export; `git diff --check`; kiểm tra tự động có mock AsyncStorage cho hydration, khôi phục/xóa bộ lọc, giới hạn trường được persist và remote-first cancellation cache; assertion cho tìm kiếm, tòa nhà, các dải sức chứa, equipment AND, lọc kết hợp và trạng thái rỗng.
+- **Hạn chế còn lại:** Chưa xác minh đóng/mở lại ứng dụng trên thiết bị/emulator. Booking lưu trong Zustand chỉ là cache runtime; Supabase vẫn là nguồn dữ liệu chuẩn. Chính sách Supabase hiện tại chưa cho phép hủy booking nên chưa thêm thao tác ghi/hủy từ xa hoặc giao diện hủy trong MP2-08.

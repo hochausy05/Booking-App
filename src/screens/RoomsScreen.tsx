@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { FlatList, Keyboard, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { ListRenderItem } from 'react-native';
@@ -10,7 +10,8 @@ import { colors, fontSize, spacing } from '../constants/theme';
 import type { Room } from '../types';
 import type { RoomsStackParamList } from '../navigation/navigationTypes';
 import { filterRooms } from '../utils/filterRooms';
-import type { CapacityRange, EquipmentKey, RoomFilters } from '../utils/filterRooms';
+import type { CapacityRange, EquipmentKey } from '../utils/filterRooms';
+import { useBookingStore } from '../store/useBookingStore';
 
 type Props = NativeStackScreenProps<RoomsStackParamList, 'RoomsHome'>;
 const buildings: Array<Room['building'] | 'all'> = ['all', 'A', 'B', 'C', 'V'];
@@ -26,10 +27,13 @@ const equipmentOptions: Array<{ key: EquipmentKey; label: string }> = [
   { key: 'highSpecPc', label: 'Máy tính cấu hình cao' },
   { key: 'ac', label: 'Điều hòa' },
 ];
-const initialFilters: RoomFilters = { search: '', building: 'all', capacity: 'any', equipment: [] };
-
 export function RoomsScreen({ navigation }: Props) {
-  const [filters, setFilters] = useState<RoomFilters>(initialFilters);
+  const filters = useBookingStore((state) => state.filters);
+  const setSearch = useBookingStore((state) => state.setSearch);
+  const setBuilding = useBookingStore((state) => state.setBuilding);
+  const setCapacity = useBookingStore((state) => state.setCapacity);
+  const toggleEquipment = useBookingStore((state) => state.toggleEquipment);
+  const clearFilters = useBookingStore((state) => state.clearFilters);
   const filteredRooms = useMemo(() => filterRooms(rooms, filters), [filters]);
 
   const openRoomDetail = useCallback(
@@ -40,15 +44,6 @@ export function RoomsScreen({ navigation }: Props) {
     ({ item }) => <RoomCard room={item} onPress={openRoomDetail} />,
     [openRoomDetail],
   );
-  const toggleEquipment = (key: EquipmentKey) => {
-    setFilters((current) => ({
-      ...current,
-      equipment: current.equipment.includes(key)
-        ? current.equipment.filter((item) => item !== key)
-        : [...current.equipment, key],
-    }));
-  };
-
   const listHeader = (
     <View style={styles.header}>
       <Text style={styles.title}>Phòng học</Text>
@@ -57,7 +52,7 @@ export function RoomsScreen({ navigation }: Props) {
         accessibilityLabel="Tìm kiếm theo tên phòng"
         autoCorrect={false}
         clearButtonMode="while-editing"
-        onChangeText={(search) => setFilters((current) => ({ ...current, search }))}
+        onChangeText={setSearch}
         onSubmitEditing={Keyboard.dismiss}
         placeholder="Tìm kiếm theo tên phòng"
         placeholderTextColor={colors.mutedText}
@@ -76,7 +71,7 @@ export function RoomsScreen({ navigation }: Props) {
               label={building === 'all' ? 'Tất cả' : building}
               selected={selected}
               accessibilityLabel={building === 'all' ? 'Tất cả tòa nhà' : `Tòa nhà ${building}`}
-              onPress={() => setFilters((current) => ({ ...current, building }))}
+              onPress={() => setBuilding(building)}
             />
           );
         })}
@@ -89,7 +84,7 @@ export function RoomsScreen({ navigation }: Props) {
             key={key}
             label={label}
             selected={filters.capacity === key}
-            onPress={() => setFilters((current) => ({ ...current, capacity: key }))}
+            onPress={() => setCapacity(key)}
           />
         ))}
       </View>
@@ -119,7 +114,7 @@ export function RoomsScreen({ navigation }: Props) {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyState}>Không tìm thấy phòng phù hợp.</Text>
-            <FilterChip label="Xóa bộ lọc" selected={false} onPress={() => setFilters(initialFilters)} />
+            <FilterChip label="Xóa bộ lọc" selected={false} onPress={clearFilters} />
           </View>
         }
         ListHeaderComponent={listHeader}

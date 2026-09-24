@@ -1,1 +1,4 @@
-export const DEMO_USER_ID = 'demo-student';
+export const DEMO_USER = {
+  id: 'demo-student',
+  name: 'Sinh viên VKU',
+} as const;
