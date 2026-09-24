@@ -46,17 +46,18 @@
 - [x] Memoize room card
 - [ ] Verify room taps and Back navigation on a running app
 
-### [ ] MP2-05 — Search & Multi-Filter
+### [x] MP2-05 — Search & Multi-Filter
 
-- [ ] Search by room name
-- [ ] Building filter A/B/C/V
-- [ ] Capacity filter 2–20
-- [ ] Projector filter
-- [ ] Whiteboard filter
-- [ ] High-spec PC filter
-- [ ] AC filter
-- [ ] Support combined filters
-- [ ] Handle empty results
+- [x] Search by room name
+- [x] Building filter A/B/C/V
+- [x] Capacity filter 2–20
+- [x] Projector filter
+- [x] Whiteboard filter
+- [x] High-spec PC filter
+- [x] AC filter
+- [x] Support combined filters
+- [x] Handle empty results and clear all filters
+- [ ] Verify search, filter chip interaction, empty state, and Room Detail navigation on a running app / physical device (cần kiểm tra thủ công)
 
 ### [ ] MP2-06 — Room Detail & Time Selector
 

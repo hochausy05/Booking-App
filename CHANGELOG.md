@@ -41,3 +41,9 @@
 - **Các thay đổi chính:** Hiển thị 16 phòng bằng `FlatList`; tạo `React.memo` RoomCard với placeholder ảnh, thông tin phòng, nhãn thiết bị và badge trạng thái; thêm helper availability deterministic tách khỏi Room model; điều hướng đến Room Detail bằng `roomId` và hiển thị fallback nếu không tìm thấy phòng; bỏ nút preview cũ.
 - **Kiểm tra đã thực hiện:** `npm run typecheck`; Android bundle export thành công; kiểm tra dữ liệu xác nhận đủ 16 room, helper phân bổ Available/Occupied ổn định, FlatList được dùng, tham số điều hướng là `roomId`, nút preview cũ đã bị xóa.
 - **Hạn chế còn lại:** Không có emulator/thiết bị ADB kết nối nên chưa kiểm thử trực tiếp nhiều thẻ phòng, Room Detail và Back. Mục xác minh tương tác còn mở trong `TASKS.md`.
+# 2026-09-24 — MP2-05 Search & Multi-Filter
+
+- **Trạng thái:** Hoàn thành phần triển khai và kiểm tra tự động.
+- **Thay đổi chính:** Thêm tìm kiếm tên phòng không phân biệt hoa thường, chip lọc tòa nhà và sức chứa, lọc nhiều thiết bị theo điều kiện AND, bộ lọc tổng hợp có memoization, số lượng kết quả và trạng thái rỗng kèm nút xóa toàn bộ bộ lọc. Giữ FlatList, RoomCard và điều hướng Room Detail hiện có.
+- **Kiểm tra:** `npm run typecheck` thành công; chạy assertion trên dữ liệu 16 phòng cho tìm kiếm, 4 tòa nhà, 3 dải sức chứa, từng thiết bị, thiết bị kết hợp theo AND, bộ lọc kết hợp và không có kết quả.
+- **Hạn chế:** Chưa kiểm tra thao tác trực tiếp trên app/thiết bị; cần xác nhận bàn phím, chip, empty state và điều hướng Room Detail thủ công.
