@@ -111,10 +111,7 @@ Do not treat AsyncStorage as the shared source of truth for multi-user reservati
 
 ### Preferred real-time option
 
-Use Supabase PostgreSQL for:
-
-- Rooms
-- Bookings
+Keep the room catalog local in `src/constants/rooms.ts`. Use Supabase PostgreSQL as the authoritative source for bookings.
 
 Use Supabase Realtime for booking changes.
 
@@ -153,7 +150,9 @@ free   occupied
 create   conflict message
 ```
 
-The data layer should enforce uniqueness or otherwise prevent duplicate active bookings for the same room/date/slot.
+`public.bookings` enforces uniqueness for `(room_id, booking_date, start_time, end_time)` where `status = 'active'`. The mobile client maps database rows through `src/services/bookingService.ts`; room/date Realtime events trigger availability refreshes.
+
+The current educational demo has no authentication. Its anon policies are limited to reading active bookings and inserting rows for the fixed `demo-student` ID. This is suitable only for the assignment demo; add real authentication and per-user ownership policies before production.
 
 ## 7. Room Availability
 

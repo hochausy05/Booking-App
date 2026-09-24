@@ -55,3 +55,22 @@
 - **Thay đổi chính:** Thêm tìm kiếm tên phòng không phân biệt hoa thường, chip lọc tòa nhà và sức chứa, lọc nhiều thiết bị theo điều kiện AND, bộ lọc tổng hợp có memoization, số lượng kết quả và trạng thái rỗng kèm nút xóa toàn bộ bộ lọc. Giữ FlatList, RoomCard và điều hướng Room Detail hiện có.
 - **Kiểm tra:** `npm run typecheck` thành công; chạy assertion trên dữ liệu 16 phòng cho tìm kiếm, 4 tòa nhà, 3 dải sức chứa, từng thiết bị, thiết bị kết hợp theo AND, bộ lọc kết hợp và không có kết quả.
 - **Hạn chế:** Chưa kiểm tra thao tác trực tiếp trên app/thiết bị; cần xác nhận bàn phím, chip, empty state và điều hướng Room Detail thủ công.
+
+## MP2-07 — Booking & Conflict Prevention + Realtime
+
+- **Ngày:** 2026-09-24
+- **Trạng thái:** Hoàn thành; còn kiểm tra cạnh tranh trên hai thiết bị thật.
+- **Supabase:** Áp dụng migration `bookings_schema` cho project Booking-App (`cbudliffmptczqucldsd`). Tạo `public.bookings` với trạng thái/check thời gian, RLS và chính sách anon demo giới hạn đọc booking active/ghi `demo-student`; giữ catalog phòng ở local.
+- **Chống xung đột:** Dùng partial unique index trên `(room_id, booking_date, start_time, end_time)` với `status = 'active'`; tầng service kiểm tra trước và ánh xạ SQLSTATE `23505` thành lỗi conflict thân thiện.
+- **Realtime:** Bật bảng trong `supabase_realtime`; client subscribe theo room, lọc ngày ở callback, tải lại booking khi có thay đổi và gỡ channel khi đổi ngữ cảnh/unmount.
+- **Thay đổi ứng dụng:** Cài `@supabase/supabase-js@2.117.1`; thêm kiểu booking, demo user ID, Supabase client/service, cấu hình `.env.example` và `.gitignore`; thay giả lập slot bận bằng trạng thái từ Supabase; thêm thao tác Book Room cùng loading/error/conflict/success.
+- **Kiểm tra:** `npm run typecheck`, `npx expo config --json`, Android bundle export, `git diff --check`; xác minh schema/cột/RLS/index/publication; anon client insert/select, duplicate bị từ chối với `23505`, event Realtime INSERT nhận được và channel đóng; SQL xác minh hủy rồi đặt lại cùng slot, insert slot khác thành công; đã xóa toàn bộ hàng kiểm tra và xác nhận còn 0 hàng.
+- **Hạn chế:** Chưa thử hai thiết bị gửi booking đồng thời trên thiết bị thật. Supabase Advisor cũng báo hàm có sẵn `public.rls_auto_enable()` cho phép anon/authenticated gọi SECURITY DEFINER; hàm này ngoài migration MP2-07 và chưa bị thay đổi. Xem [hướng dẫn xử lý Advisor](https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable).
+
+## MP2-07 — UI Polish & Vietnamese Localization
+
+- **Ngày:** 2026-09-24
+- **Trạng thái:** Hoàn thành phần giao diện và kiểm tra tự động; còn xác minh bố cục trên thiết bị thật.
+- **Các thay đổi chính:** Việt hóa nhãn điều hướng, tìm kiếm, bộ lọc, thiết bị, trạng thái phòng/khung giờ, ngày tháng, thông báo lỗi và kết quả đặt phòng. Thêm vùng an toàn cho các màn hình phù hợp, thu gọn RoomCard và khoảng cách các bộ lọc/chi tiết, đồng thời tăng khoảng đệm cuộn cuối danh sách và trang chi tiết.
+- **Các kiểm tra đã thực hiện:** `npm run typecheck`; `npx expo export --platform android --output-dir .expo-mp207-polish-check`; `git diff --check` đều thành công. Logic tìm kiếm/lọc, đặt phòng, Supabase, Realtime và điều hướng không được thay đổi trong phần polish.
+- **Hạn chế còn lại:** Chưa thao tác trực tiếp trên iOS/Android; cần kiểm tra nội dung tiếng Việt, safe area, cuộn hàng chọn ngày và khoảng đệm cuối trang trên thiết bị.

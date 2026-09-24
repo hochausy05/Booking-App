@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { FlatList, Keyboard, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import type { ListRenderItem } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { FilterChip } from '../components/FilterChip';
@@ -14,16 +15,16 @@ import type { CapacityRange, EquipmentKey, RoomFilters } from '../utils/filterRo
 type Props = NativeStackScreenProps<RoomsStackParamList, 'RoomsHome'>;
 const buildings: Array<Room['building'] | 'all'> = ['all', 'A', 'B', 'C', 'V'];
 const capacityOptions: Array<{ key: CapacityRange; label: string }> = [
-  { key: 'any', label: 'Any' },
+  { key: 'any', label: 'Bất kỳ' },
   { key: '2-4', label: '2–4' },
   { key: '5-10', label: '5–10' },
   { key: '11-20', label: '11–20' },
 ];
 const equipmentOptions: Array<{ key: EquipmentKey; label: string }> = [
-  { key: 'projector', label: 'Projector' },
-  { key: 'whiteboard', label: 'Whiteboard' },
-  { key: 'highSpecPc', label: 'High-spec PC' },
-  { key: 'ac', label: 'AC' },
+  { key: 'projector', label: 'Máy chiếu' },
+  { key: 'whiteboard', label: 'Bảng trắng' },
+  { key: 'highSpecPc', label: 'Máy tính cấu hình cao' },
+  { key: 'ac', label: 'Điều hòa' },
 ];
 const initialFilters: RoomFilters = { search: '', building: 'all', capacity: 'any', equipment: [] };
 
@@ -50,38 +51,38 @@ export function RoomsScreen({ navigation }: Props) {
 
   const listHeader = (
     <View style={styles.header}>
-      <Text style={styles.title}>Study Rooms</Text>
-      <Text style={styles.subtitle}>Find a space that works for your study session.</Text>
+      <Text style={styles.title}>Phòng học</Text>
+      <Text style={styles.subtitle}>Tìm không gian phù hợp cho buổi học của bạn.</Text>
       <TextInput
-        accessibilityLabel="Search rooms by name"
+        accessibilityLabel="Tìm kiếm theo tên phòng"
         autoCorrect={false}
         clearButtonMode="while-editing"
         onChangeText={(search) => setFilters((current) => ({ ...current, search }))}
         onSubmitEditing={Keyboard.dismiss}
-        placeholder="Search by room name"
+        placeholder="Tìm kiếm theo tên phòng"
         placeholderTextColor={colors.mutedText}
         returnKeyType="search"
         style={styles.search}
         value={filters.search}
       />
 
-      <Text style={styles.filterHeading}>Building</Text>
+      <Text style={styles.filterHeading}>Tòa nhà</Text>
       <ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false}>
         {buildings.map((building) => {
           const selected = filters.building === building;
           return (
             <FilterChip
               key={building}
-              label={building === 'all' ? 'All' : building}
+              label={building === 'all' ? 'Tất cả' : building}
               selected={selected}
-              accessibilityLabel={building === 'all' ? 'All buildings' : `Building ${building}`}
+              accessibilityLabel={building === 'all' ? 'Tất cả tòa nhà' : `Tòa nhà ${building}`}
               onPress={() => setFilters((current) => ({ ...current, building }))}
             />
           );
         })}
       </ScrollView>
 
-      <Text style={styles.filterHeading}>Capacity</Text>
+      <Text style={styles.filterHeading}>Sức chứa</Text>
       <View style={styles.chipRow}>
         {capacityOptions.map(({ key, label }) => (
           <FilterChip
@@ -93,7 +94,7 @@ export function RoomsScreen({ navigation }: Props) {
         ))}
       </View>
 
-      <Text style={styles.filterHeading}>Equipment</Text>
+      <Text style={styles.filterHeading}>Thiết bị</Text>
       <View style={styles.chipRow}>
         {equipmentOptions.map(({ key, label }) => (
           <FilterChip
@@ -104,12 +105,12 @@ export function RoomsScreen({ navigation }: Props) {
           />
         ))}
       </View>
-      <Text style={styles.resultCount}>{filteredRooms.length} {filteredRooms.length === 1 ? 'room' : 'rooms'}</Text>
+      <Text style={styles.resultCount}>{filteredRooms.length} phòng</Text>
     </View>
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView edges={['top']} style={styles.container}>
       <FlatList
         contentContainerStyle={styles.listContent}
         data={filteredRooms}
@@ -117,24 +118,24 @@ export function RoomsScreen({ navigation }: Props) {
         keyboardShouldPersistTaps="handled"
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyState}>No rooms match your filters.</Text>
-            <FilterChip label="Clear filters" selected={false} onPress={() => setFilters(initialFilters)} />
+            <Text style={styles.emptyState}>Không tìm thấy phòng phù hợp.</Text>
+            <FilterChip label="Xóa bộ lọc" selected={false} onPress={() => setFilters(initialFilters)} />
           </View>
         }
         ListHeaderComponent={listHeader}
         renderItem={renderRoom}
         showsVerticalScrollIndicator={false}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { backgroundColor: colors.background, flex: 1 },
-  listContent: { padding: spacing.md, paddingBottom: spacing.xl },
-  header: { marginBottom: spacing.md, paddingTop: spacing.sm },
+  listContent: { paddingHorizontal: spacing.md, paddingTop: spacing.sm, paddingBottom: spacing.xl + 72 },
+  header: { marginBottom: spacing.sm },
   title: { color: colors.text, fontSize: fontSize.title, fontWeight: '700', marginBottom: spacing.xs },
-  subtitle: { color: colors.mutedText, fontSize: fontSize.body, marginBottom: spacing.md },
+  subtitle: { color: colors.mutedText, fontSize: fontSize.caption, marginBottom: spacing.sm },
   search: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
@@ -144,11 +145,11 @@ const styles = StyleSheet.create({
     fontSize: fontSize.body,
     minHeight: 48,
     paddingHorizontal: spacing.md,
-    marginBottom: spacing.md,
+    marginBottom: spacing.sm,
   },
-  filterHeading: { color: colors.text, fontSize: fontSize.caption, fontWeight: '700', marginBottom: spacing.xs },
-  chipRow: { flexDirection: 'row', flexWrap: 'wrap' },
+  filterHeading: { color: colors.text, fontSize: fontSize.caption, fontWeight: '700', marginTop: spacing.xs, marginBottom: spacing.xs },
+  chipRow: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: spacing.xs },
   resultCount: { color: colors.mutedText, fontSize: fontSize.caption, marginTop: spacing.xs },
-  emptyContainer: { alignItems: 'center', paddingVertical: spacing.xl },
+  emptyContainer: { alignItems: 'center', paddingVertical: spacing.lg },
   emptyState: { color: colors.mutedText, fontSize: fontSize.body, marginBottom: spacing.md, textAlign: 'center' },
 });

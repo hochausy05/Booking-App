@@ -21,7 +21,7 @@ function RoomCardComponent({ room, onPress }: RoomCardProps) {
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${room.name}, Building ${room.building}, ${isAvailable ? 'Available Now' : 'Occupied'}`}
+      accessibilityLabel={`${room.name}, tòa nhà ${room.building}, ${isAvailable ? 'Đang trống' : 'Đang sử dụng'}`}
       onPress={() => onPress(room.id)}
       style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
     >
@@ -29,7 +29,7 @@ function RoomCardComponent({ room, onPress }: RoomCardProps) {
         <Image source={room.image} style={styles.image} />
       ) : (
         <View style={styles.imageFallback}>
-          <Text style={styles.imageFallbackText}>Room photo unavailable</Text>
+          <Text style={styles.imageFallbackText}>Chưa có ảnh phòng</Text>
         </View>
       )}
 
@@ -38,13 +38,13 @@ function RoomCardComponent({ room, onPress }: RoomCardProps) {
           <Text style={styles.roomName}>{room.name}</Text>
           <View style={[styles.statusBadge, isAvailable ? styles.availableBadge : styles.occupiedBadge]}>
             <Text style={[styles.statusText, isAvailable ? styles.availableText : styles.occupiedText]}>
-              {isAvailable ? 'Available Now' : 'Occupied'}
+              {isAvailable ? 'Đang trống' : 'Đang sử dụng'}
             </Text>
           </View>
         </View>
-        <Text style={styles.meta}>Building {room.building} · Floor {room.floor} · Capacity {room.capacity}</Text>
+        <Text style={styles.meta}>Tòa {room.building} · Tầng {room.floor} · {room.capacity} người</Text>
         <Text style={styles.equipment} numberOfLines={2}>
-          {equipmentSummary || 'No equipment listed'}
+          {equipmentSummary || 'Chưa có thông tin thiết bị'}
         </Text>
       </View>
     </Pressable>
@@ -67,13 +67,13 @@ const styles = StyleSheet.create({
   },
   image: {
     backgroundColor: colors.border,
-    height: 132,
+    height: 92,
     width: '100%',
   },
   imageFallback: {
     alignItems: 'center',
     backgroundColor: '#E9EDF5',
-    height: 132,
+    height: 92,
     justifyContent: 'center',
     width: '100%',
   },
@@ -82,25 +82,25 @@ const styles = StyleSheet.create({
     fontSize: fontSize.caption,
   },
   content: {
-    padding: spacing.md,
+    padding: spacing.sm + 4,
   },
   titleRow: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: spacing.sm,
+    marginBottom: spacing.xs,
   },
   roomName: {
     color: colors.text,
     flexShrink: 1,
-    fontSize: fontSize.screenTitle,
+    fontSize: fontSize.body,
     fontWeight: '700',
     marginRight: spacing.sm,
   },
   statusBadge: {
     borderRadius: borderRadius.lg,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.xs + 2,
+    paddingVertical: 3,
   },
   availableBadge: {
     backgroundColor: '#E7F6EC',

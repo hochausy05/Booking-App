@@ -36,6 +36,8 @@ EXPO_PUBLIC_SUPABASE_URL=
 EXPO_PUBLIC_SUPABASE_ANON_KEY=
 ```
 
+Copy `.env.example` to `.env` and provide the project URL and anon/publishable key. Restart Expo after changing environment values. The app safely reports missing configuration; never put a service-role or secret key in the mobile app.
+
 Never commit private service-role credentials.
 
 Provide a safe `.env.example` if environment variables are required.

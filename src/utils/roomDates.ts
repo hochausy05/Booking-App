@@ -15,12 +15,13 @@ export function toDateKey(date: Date): string {
 export function getNextSevenDates(from: Date = new Date()): RoomDateOption[] {
   const start = new Date(from.getFullYear(), from.getMonth(), from.getDate());
   const todayKey = toDateKey(start);
+  const weekdays = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
 
   return Array.from({ length: 7 }, (_, index) => {
     const date = new Date(start.getFullYear(), start.getMonth(), start.getDate() + index);
     return {
       dateKey: toDateKey(date),
-      weekday: date.toLocaleDateString('en-US', { weekday: 'short' }),
+      weekday: weekdays[date.getDay()],
       dayNumber: String(date.getDate()),
       isToday: toDateKey(date) === todayKey,
     };
@@ -29,6 +30,5 @@ export function getNextSevenDates(from: Date = new Date()): RoomDateOption[] {
 
 export function formatDateForSummary(dateKey: string): string {
   const [year, month, day] = dateKey.split('-').map(Number);
-  const date = new Date(year, month - 1, day);
-  return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  return `${day} thg ${month}, ${year}`;
 }

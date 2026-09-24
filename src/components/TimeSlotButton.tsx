@@ -10,7 +10,7 @@ type TimeSlotButtonProps = {
 
 export function TimeSlotButton({ label, state, onPress }: TimeSlotButtonProps) {
   const disabled = state === 'booked' || state === 'past';
-  const stateLabel = state === 'booked' ? 'Booked' : state === 'past' ? 'Past' : state === 'selected' ? 'Selected' : 'Available';
+  const stateLabel = state === 'booked' ? 'Đã đặt' : state === 'past' ? 'Đã qua' : state === 'selected' ? 'Đã chọn' : 'Còn trống';
 
   return (
     <Pressable

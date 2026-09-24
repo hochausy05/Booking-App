@@ -69,15 +69,21 @@
 - [x] Reset selected slot when changing date
 - [ ] Verify date/slot interaction, invalid-room fallback and Room Detail/Back navigation on a running app / physical device (cần kiểm tra thủ công)
 
-### [ ] MP2-07 — Booking & Conflict Prevention
+### [x] MP2-07 — Booking & Conflict Prevention
 
-- [ ] Create booking flow
-- [ ] Revalidate availability before creation
-- [ ] Prevent duplicate room/date/slot booking
-- [ ] Show conflict feedback
-- [ ] Refresh availability after booking
-- [ ] Add realtime synchronization if using Supabase
-- [ ] Test two-device / competing-booking scenario if realtime is enabled
+- [x] Add typed booking contract and Supabase client/service
+- [x] Add local migration for bookings, RLS policies, active-slot unique index and Realtime publication
+- [x] Load active room/date bookings and remove temporary booked-slot simulation
+- [x] Add booking action, loading/success/conflict/error states and availability revalidation
+- [x] Apply migration to Booking-App (`cbudliffmptczqucldsd`)
+- [x] Verify schema, status/time checks, RLS policies and anon access
+- [x] Verify the partial unique index rejects duplicate active slots
+- [x] Verify cancellation allows rebooking and unrelated room/date/slot insert succeeds
+- [x] Verify Realtime publication, filtered INSERT delivery and subscription cleanup
+- [x] Verify booking service persistence, conflict mapping, TypeScript, Expo config and Android bundle
+- [x] Localize UI copy to Vietnamese and compact the discovery/detail layouts
+- [ ] Test competing bookings and Realtime updates across two physical devices (cần kiểm tra thủ công)
+- [ ] Verify Vietnamese copy, safe-area spacing, date row scrolling and bottom padding on iOS/Android (cần kiểm tra thủ công)
 
 ### [ ] MP2-08 — Zustand & Persistence
 

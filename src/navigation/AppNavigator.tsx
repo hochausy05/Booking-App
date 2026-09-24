@@ -21,7 +21,7 @@ function RoomsNavigator() {
       <RoomsStack.Screen
         component={RoomDetailScreen}
         name="RoomDetail"
-        options={{ title: 'Room Detail', headerBackTitle: 'Rooms' }}
+        options={{ title: 'Chi tiết phòng', headerBackTitle: 'Phòng học' }}
       />
     </RoomsStack.Navigator>
   );
@@ -40,11 +40,11 @@ export function AppNavigator() {
           tabBarStyle: { backgroundColor: colors.surface },
         }}
       >
-        <Tab.Screen component={RoomsNavigator} name="Rooms" options={{ title: 'Rooms' }} />
+        <Tab.Screen component={RoomsNavigator} name="Rooms" options={{ title: 'Phòng học' }} />
         <Tab.Screen
           component={MyBookingsScreen}
           name="MyBookings"
-          options={{ title: 'My Bookings' }}
+          options={{ title: 'Lịch đặt phòng' }}
         />
       </Tab.Navigator>
     </NavigationContainer>

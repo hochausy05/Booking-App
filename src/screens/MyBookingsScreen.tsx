@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, fontSize, spacing } from '../constants/theme';
 
 export function MyBookingsScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>My Bookings</Text>
-      <Text style={styles.description}>Your bookings will appear here.</Text>
-    </View>
+    <SafeAreaView edges={['top']} style={styles.container}>
+      <Text style={styles.title}>Lịch đặt phòng</Text>
+      <Text style={styles.description}>Danh sách đặt phòng sẽ hiển thị tại đây.</Text>
+    </SafeAreaView>
   );
 }
 
