@@ -59,15 +59,15 @@
 - [x] Handle empty results and clear all filters
 - [ ] Verify search, filter chip interaction, empty state, and Room Detail navigation on a running app / physical device (cần kiểm tra thủ công)
 
-### [ ] MP2-06 — Room Detail & Time Selector
+### [x] MP2-06 — Room Detail & Time Selector
 
-- [ ] Show room details
-- [ ] Implement 7-day date selector
-- [ ] Implement fixed 2-hour slots
-- [ ] Show available state
-- [ ] Show selected state
-- [ ] Show booked/disabled state
-- [ ] Prevent selection of booked slots
+- [x] Show room details, equipment and availability with invalid-room fallback
+- [x] Implement 7-day date selector with stable YYYY-MM-DD keys
+- [x] Reuse centralized fixed 2-hour slots
+- [x] Show available, selected, booked and past states
+- [x] Prevent selection of booked and past slots
+- [x] Reset selected slot when changing date
+- [ ] Verify date/slot interaction, invalid-room fallback and Room Detail/Back navigation on a running app / physical device (cần kiểm tra thủ công)
 
 ### [ ] MP2-07 — Booking & Conflict Prevention
 

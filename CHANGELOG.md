@@ -41,6 +41,14 @@
 - **Các thay đổi chính:** Hiển thị 16 phòng bằng `FlatList`; tạo `React.memo` RoomCard với placeholder ảnh, thông tin phòng, nhãn thiết bị và badge trạng thái; thêm helper availability deterministic tách khỏi Room model; điều hướng đến Room Detail bằng `roomId` và hiển thị fallback nếu không tìm thấy phòng; bỏ nút preview cũ.
 - **Kiểm tra đã thực hiện:** `npm run typecheck`; Android bundle export thành công; kiểm tra dữ liệu xác nhận đủ 16 room, helper phân bổ Available/Occupied ổn định, FlatList được dùng, tham số điều hướng là `roomId`, nút preview cũ đã bị xóa.
 - **Hạn chế còn lại:** Không có emulator/thiết bị ADB kết nối nên chưa kiểm thử trực tiếp nhiều thẻ phòng, Room Detail và Back. Mục xác minh tương tác còn mở trong `TASKS.md`.
+
+## MP2-06 — Room Detail & Time Selector
+
+- **Ngày:** 2026-09-24
+- **Trạng thái:** Hoàn thành phần triển khai và kiểm tra tự động.
+- **Các thay đổi chính:** Màn hình Room Detail hiển thị dữ liệu phòng, nhãn thiết bị dùng chung, ảnh placeholder và trạng thái hiện có; thêm 7 ngày liên tiếp với khóa `YYYY-MM-DD`, các khung giờ lấy từ `TIME_SLOTS`, chọn một slot, tóm tắt lựa chọn và reset slot khi đổi ngày. Thêm helper deterministic cho slot tạm bận và vô hiệu hóa slot đã qua trong hôm nay.
+- **Kiểm tra đã thực hiện:** `npm run typecheck`; assertion cho 7 ngày, ranh giới tháng/năm, 4 slot cố định, booked deterministic và past-time handling; `npx expo export --platform android --output-dir .expo-mp206-check` đóng gói thành công; `git diff --check`.
+- **Hạn chế còn lại:** Chưa kiểm tra tương tác trực tiếp trên app/thiết bị; cần xác nhận chọn ngày/slot, fallback room không hợp lệ và điều hướng Back thủ công.
 # 2026-09-24 — MP2-05 Search & Multi-Filter
 
 - **Trạng thái:** Hoàn thành phần triển khai và kiểm tra tự động.

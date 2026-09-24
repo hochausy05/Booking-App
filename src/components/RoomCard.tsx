@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { borderRadius, colors, fontSize, spacing } from '../constants/theme';
+import { EQUIPMENT_LABELS } from '../constants/equipment';
 import { getRoomAvailability } from '../utils/roomAvailability';
 import type { Room } from '../types';
 
@@ -9,17 +10,10 @@ type RoomCardProps = {
   onPress: (roomId: string) => void;
 };
 
-const equipmentLabels = [
-  { key: 'projector', label: 'Projector' },
-  { key: 'whiteboard', label: 'Whiteboard' },
-  { key: 'highSpecPc', label: 'High-spec PC' },
-  { key: 'ac', label: 'AC' },
-] as const;
-
 function RoomCardComponent({ room, onPress }: RoomCardProps) {
   const availability = getRoomAvailability(room);
   const isAvailable = availability === 'available';
-  const equipmentSummary = equipmentLabels
+  const equipmentSummary = EQUIPMENT_LABELS
     .filter(({ key }) => room.equipment[key])
     .map(({ label }) => label)
     .join(' · ');
