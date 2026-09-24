@@ -13,12 +13,14 @@ import { getRoomAvailability } from '../utils/roomAvailability';
 import { formatDateForSummary, getNextSevenDates } from '../utils/roomDates';
 import { isSlotInPast } from '../utils/slotAvailability';
 import { useBookingStore } from '../store/useBookingStore';
+import { scheduleBookingReminder } from '../services/bookingNotifications';
 
 type Props = NativeStackScreenProps<RoomsStackParamList, 'RoomDetail'>;
 
 export function RoomDetailScreen({ navigation, route }: Props) {
   const demoUserId = useBookingStore((state) => state.demoUser.id);
   const upsertBooking = useBookingStore((state) => state.upsertBooking);
+  const setNotificationId = useBookingStore((state) => state.setNotificationId);
   const room = rooms.find((candidate) => candidate.id === route.params.roomId);
   const roomId = room?.id;
   const dates = useMemo(() => getNextSevenDates(), []);
@@ -30,6 +32,7 @@ export function RoomDetailScreen({ navigation, route }: Props) {
   const [submitting, setSubmitting] = useState(false);
   const [bookingError, setBookingError] = useState<string | null>(null);
   const [successBooking, setSuccessBooking] = useState<Booking | null>(null);
+  const [reminderMessage, setReminderMessage] = useState<string | null>(null);
   const submittingRef = useRef(false);
   const availabilityRequestRef = useRef(0);
 
@@ -81,6 +84,7 @@ export function RoomDetailScreen({ navigation, route }: Props) {
     setSelectedSlotId(null);
     setBookings([]);
     setBookingError(null);
+    setReminderMessage(null);
     setSuccessBooking(null);
   };
 
@@ -92,6 +96,7 @@ export function RoomDetailScreen({ navigation, route }: Props) {
     submittingRef.current = true;
     setSubmitting(true);
     setBookingError(null);
+    setReminderMessage(null);
     setSuccessBooking(null);
     try {
       const booking = await createBooking({
@@ -102,6 +107,14 @@ export function RoomDetailScreen({ navigation, route }: Props) {
         endTime: slot.endTime,
       });
       upsertBooking(booking);
+      const reminder = await scheduleBookingReminder(booking, room.name);
+      if (reminder.status === 'scheduled') {
+        setNotificationId(booking.id, reminder.notificationId);
+      } else if (reminder.status === 'permission-denied') {
+        setReminderMessage('Chưa cấp quyền thông báo. Bạn vẫn có thể sử dụng chức năng đặt phòng.');
+      } else if (reminder.status === 'failed') {
+        setReminderMessage('Đã đặt phòng nhưng không thể bật nhắc lịch trên thiết bị.');
+      }
       setBookings((current) => [...current, booking]);
       setSuccessBooking(booking);
       setSelectedSlotId(null);
@@ -211,6 +224,7 @@ export function RoomDetailScreen({ navigation, route }: Props) {
           <Text style={styles.successTitle}>Đặt phòng thành công</Text>
           <Text style={styles.successText}>{room.name} · {formatDateForSummary(successBooking.date)}</Text>
           <Text style={styles.successText}>{successBooking.startTime}–{successBooking.endTime}</Text>
+          {reminderMessage ? <Text style={styles.reminderText}>{reminderMessage}</Text> : null}
         </View>
       ) : null}
 
@@ -269,6 +283,7 @@ const styles = StyleSheet.create({
   successNotice: { backgroundColor: '#E7F6EC', borderRadius: borderRadius.md, marginTop: spacing.md, padding: spacing.md },
   successTitle: { color: '#237A3B', fontSize: fontSize.body, fontWeight: '700', marginBottom: spacing.xs },
   successText: { color: colors.text, fontSize: fontSize.caption, marginTop: 2 },
+  reminderText: { color: colors.mutedText, fontSize: fontSize.caption, marginTop: spacing.sm },
   backButton: { alignSelf: 'flex-start', marginTop: spacing.lg, minHeight: 44, justifyContent: 'center', paddingVertical: spacing.sm },
   backText: { color: colors.primary, fontSize: fontSize.body, fontWeight: '600' },
   pressed: { opacity: 0.8 },

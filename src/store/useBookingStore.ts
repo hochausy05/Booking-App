@@ -22,20 +22,22 @@ const createInitialFilters = (): RoomFilters => ({
 type BookingStore = {
   demoUser: DemoUser;
   filters: RoomFilters;
-  activeBookings: Booking[];
+  userBookings: Booking[];
+  notificationIds: Record<string, string>;
   hasHydrated: boolean;
   setSearch: (search: string) => void;
   setBuilding: (building: RoomFilters['building']) => void;
   setCapacity: (capacity: CapacityRange) => void;
   toggleEquipment: (equipment: EquipmentKey) => void;
   clearFilters: () => void;
-  setActiveBookings: (bookings: Booking[]) => void;
+  setUserBookings: (bookings: Booking[]) => void;
   upsertBooking: (booking: Booking) => void;
-  removeCancelledBooking: (bookingId: string) => void;
+  setNotificationId: (bookingId: string, notificationId: string) => void;
+  removeNotificationId: (bookingId: string) => void;
   cancelBooking: (
     bookingId: string,
-    cancelRemotely: (bookingId: string) => Promise<void>,
-  ) => Promise<void>;
+    cancelRemotely: (bookingId: string) => Promise<Booking>,
+  ) => Promise<Booking>;
   setHasHydrated: (hasHydrated: boolean) => void;
 };
 
@@ -47,7 +49,8 @@ export const useBookingStore = create<BookingStore>()(
       demoUser: DEMO_USER,
       filters: createInitialFilters(),
       // Runtime cache only. Supabase remains the source of truth for bookings.
-      activeBookings: [],
+      userBookings: [],
+      notificationIds: {},
       hasHydrated: false,
       setSearch: (search) => set((state) => ({ filters: { ...state.filters, search } })),
       setBuilding: (building) => set((state) => ({ filters: { ...state.filters, building } })),
@@ -61,19 +64,25 @@ export const useBookingStore = create<BookingStore>()(
         },
       })),
       clearFilters: () => set({ filters: createInitialFilters() }),
-      setActiveBookings: (bookings) => set({ activeBookings: bookings.filter((booking) => booking.status === 'active') }),
+      setUserBookings: (bookings) => set({ userBookings: bookings }),
       upsertBooking: (booking) => set((state) => ({
-        activeBookings: booking.status === 'active'
-          ? [...state.activeBookings.filter((item) => item.id !== booking.id), booking]
-          : state.activeBookings.filter((item) => item.id !== booking.id),
+        userBookings: [...state.userBookings.filter((item) => item.id !== booking.id), booking],
       })),
-      removeCancelledBooking: (bookingId) => set((state) => ({
-        activeBookings: state.activeBookings.filter((booking) => booking.id !== bookingId),
+      setNotificationId: (bookingId, notificationId) => set((state) => ({
+        notificationIds: { ...state.notificationIds, [bookingId]: notificationId },
       })),
+      removeNotificationId: (bookingId) => set((state) => {
+        const notificationIds = { ...state.notificationIds };
+        delete notificationIds[bookingId];
+        return { notificationIds };
+      }),
       cancelBooking: async (bookingId, cancelRemotely) => {
         // Update the local runtime cache only after the caller's bookingService operation succeeds.
-        await cancelRemotely(bookingId);
-        set((state) => ({ activeBookings: state.activeBookings.filter((booking) => booking.id !== bookingId) }));
+        const cancelledBooking = await cancelRemotely(bookingId);
+        set((state) => ({
+          userBookings: [...state.userBookings.filter((booking) => booking.id !== bookingId), cancelledBooking],
+        }));
+        return cancelledBooking;
       },
       setHasHydrated: (hasHydrated) => set({ hasHydrated }),
     }),

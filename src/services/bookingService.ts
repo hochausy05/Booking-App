@@ -50,6 +50,19 @@ export async function getActiveBookingsForRoomDate(roomId: string, date: string)
   return (data ?? []).map(mapBooking);
 }
 
+export async function getUserBookings(userId: string): Promise<Booking[]> {
+  const client = requireSupabase();
+  const { data, error } = await client
+    .from('bookings')
+    .select(bookingColumns)
+    .eq('user_id', userId)
+    .order('booking_date', { ascending: true })
+    .order('start_time', { ascending: true });
+
+  if (error) throw new BookingServiceError('Could not load your bookings. Check your connection and try again.');
+  return (data ?? []).map(mapBooking);
+}
+
 export async function createBooking(input: CreateBookingInput): Promise<Booking> {
   const client = requireSupabase();
   const currentBookings = await getActiveBookingsForRoomDate(input.roomId, input.date);
@@ -72,6 +85,22 @@ export async function createBooking(input: CreateBookingInput): Promise<Booking>
 
   if (error?.code === '23505') throw new BookingConflictError();
   if (error || !data) throw new BookingServiceError('Could not create the booking. Check your connection and try again.');
+  return mapBooking(data);
+}
+
+export async function cancelBooking(bookingId: string, userId: string): Promise<Booking> {
+  const client = requireSupabase();
+  const { data, error } = await client
+    .from('bookings')
+    .update({ status: 'cancelled' })
+    .eq('id', bookingId)
+    .eq('user_id', userId)
+    .eq('status', 'active')
+    .select(bookingColumns)
+    .maybeSingle();
+
+  if (error) throw new BookingServiceError('Could not cancel the booking. Check your connection and try again.');
+  if (!data) throw new BookingServiceError('This booking is no longer active. Refresh your booking list and try again.');
   return mapBooking(data);
 }
 

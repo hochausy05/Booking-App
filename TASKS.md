@@ -90,7 +90,7 @@
 - [x] Create `useBookingStore`
 - [x] Centralize and store demo user/session
 - [x] Move room filters to shared store
-- [x] Keep active booking references in runtime-only cache
+- [x] Keep booking references in runtime-only cache
 - [x] Prepare remote-first cancellation store action
 - [x] Persist only demo user/session and filters with AsyncStorage
 - [x] Verify store hydration, filter restore/reset, persistence allowlist and cancellation cache behavior with mocked storage
@@ -98,13 +98,16 @@
 
 ### [ ] MP2-09 — Booking Pass, QR & Notifications
 
-- [ ] Implement My Bookings
-- [ ] Implement booking cancellation
-- [ ] Implement QR modal
-- [ ] Encode booking identity in QR
-- [ ] Schedule notification 15 minutes before booking
-- [ ] Cancel scheduled notification after booking cancellation
-- [ ] Test notification behavior on physical device
+- [x] Load current demo user's bookings from Supabase; show loading, error, empty and status states; refresh on focus/pull
+- [x] Cancel bookings remotely by changing status to `cancelled` with confirmation
+- [x] Update Zustand booking cache after remote create, fetch and cancellation
+- [x] Add QR pass modal with safe booking-only payload
+- [x] Request notification permission without blocking successful bookings
+- [x] Schedule valid local reminders 15 minutes before booking start and track IDs at runtime
+- [x] Attempt pending reminder cancellation after remote booking cancellation
+- [x] Verify service history/cancellation/rebooking, status-only RLS update, Realtime UPDATE delivery and cleanup
+- [x] Verify QR payload allowlist and notification scheduling/denial/past-time paths with automated checks
+- [ ] Verify My Bookings/QR/confirmation interactions and notification delivery/permission denial on iOS/Android device or emulator (cần kiểm tra thủ công)
 
 ### [ ] MP2-10 — Final QA & Submission
 
