@@ -2,7 +2,7 @@ import type { NavigatorScreenParams } from '@react-navigation/native';
 
 export type RoomsStackParamList = {
   RoomsHome: undefined;
-  RoomDetail: undefined;
+  RoomDetail: { roomId: string };
 };
 
 export type RootTabParamList = {

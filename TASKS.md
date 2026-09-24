@@ -34,17 +34,17 @@
 - [x] Keep availability derived later; no permanent status boolean in Room
 - [x] Validate data shape
 
-### [ ] MP2-04 — Room Discovery
+### [-] MP2-04 — Room Discovery
 
-- [ ] Implement `FlatList`
-- [ ] Implement RoomCard
-- [ ] Show room image
-- [ ] Show building/floor
-- [ ] Show capacity
-- [ ] Show equipment
-- [ ] Show Available Now / Occupied
-- [ ] Memoize room card
-- [ ] Verify smooth list interaction
+- [x] Implement `FlatList`
+- [x] Implement RoomCard
+- [x] Show room image / safe placeholder
+- [x] Show building/floor
+- [x] Show capacity
+- [x] Show equipment
+- [x] Show Available Now / Occupied
+- [x] Memoize room card
+- [ ] Verify room taps and Back navigation on a running app
 
 ### [ ] MP2-05 — Search & Multi-Filter
 

@@ -33,3 +33,11 @@
 - **Các thay đổi chính:** Thêm model `Room`, `Building`, `RoomEquipment` và `TimeSlot`; tạo 16 phòng mẫu chia đều cho bốn tòa nhà; ảnh dùng `null` an toàn do thư mục asset ảnh hiện chưa có phòng ảnh; thêm hằng số tập trung cho bốn khung giờ cố định.
 - **Kiểm tra đã thực hiện:** `npm run typecheck`; kiểm tra dataset xác nhận 16 phòng, 4 phòng mỗi tòa A/B/C/V, sức chứa 2–20, đủ projector/whiteboard/highSpecPc/ac; kiểm tra đủ bốn khung giờ; `npx expo config --json`; Android bundle export thành công.
 - **Hạn chế còn lại:** Ảnh phòng chưa có, trường `image` đang là `null` để giao diện có thể hiển thị placeholder.
+
+## MP2-04 — Room Discovery
+
+- **Ngày:** 2026-09-24
+- **Trạng thái:** Đã triển khai; chờ kiểm tra tương tác trên Expo Go/emulator.
+- **Các thay đổi chính:** Hiển thị 16 phòng bằng `FlatList`; tạo `React.memo` RoomCard với placeholder ảnh, thông tin phòng, nhãn thiết bị và badge trạng thái; thêm helper availability deterministic tách khỏi Room model; điều hướng đến Room Detail bằng `roomId` và hiển thị fallback nếu không tìm thấy phòng; bỏ nút preview cũ.
+- **Kiểm tra đã thực hiện:** `npm run typecheck`; Android bundle export thành công; kiểm tra dữ liệu xác nhận đủ 16 room, helper phân bổ Available/Occupied ổn định, FlatList được dùng, tham số điều hướng là `roomId`, nút preview cũ đã bị xóa.
+- **Hạn chế còn lại:** Không có emulator/thiết bị ADB kết nối nên chưa kiểm thử trực tiếp nhiều thẻ phòng, Room Detail và Back. Mục xác minh tương tác còn mở trong `TASKS.md`.
